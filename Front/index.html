@@ -9,18 +9,33 @@
 </head>
 
 <body>
-  <h1>Forum Développeurs</h1>
-  <section id="topicsList">
+  <h1>Forum Développeurs - Accueil</h1>
+  <section id="topicsList" hidden=true>
+    <h2>Listes des topics</h2>
   </section>
   <section id="topicTools">
-    <section id="createTopic">
-    </section>
-    <section id="viewTopic">
-    </section>
+    <form id="createTopicForm" method="post" data-slug="topics">
+      <h2>Creation d'un nouveau topic</h2>
+      <div>
+        <label for="nickname">Pseudo : </label>
+        <input class="fields" type="text" name="nickname" id="nickname" required autofocus minlength="2">
+      </div>
+      <div>
+        <label for="subject">Sujet : </label>
+        <input class="fields" type="text" name="subject" id="subject" required size="64" maxlength="64">
+      </div>
+      <div class="fields" id="txtarea">
+        <label for="topicMsg">Message : </label></br>
+        <textarea name="topicMsg" id="topicMsg" required maxlength="500" rows="5" cols="100"></textarea>
+      </div>
+      <div id="buttons">
+        <input type="reset" value="Recommencer" id="resetButton">
+        <input type="submit" value="Créer" id="submitButton">
+      </div>
+    </form>
   </section>
 
-  <script src="js/main.js"></script>
-
+  <script src="js/main.js" type="module"></script>
 </body>
 
 </html>

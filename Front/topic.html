@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="css/style.css">
+  <title>RNCP II – CDA – ECF – Conception-Developpement – « Simple Devs Forum »</title>
+</head>
+
+<body>
+  <h1>Forum Développeurs - Détail du topic</h1>
+  <section id="viewTopic">
+    <div id="topicInfos"></div>
+    <div id="topicText"></div>
+    <div id="topicReplies">
+      <ul id="repliesList"></ul>
+    </div>
+  </section>
+  <section id="topicTools">
+    <button id="replyTopicButton" hidden=true>Répondre</button>
+    <form id="replyTopicForm" method="patch" data-slug="replies">
+      <h2>Ajout d'une réponse</h2>
+      <div>
+        <label for="replyNickname">Pseudo : </label>
+        <input class="fields" type="text" name="replyNickname" id="replyNickname" required autofocus minlength="2">
+      </div>
+      <div class="fields" id="txtarea">
+        <label for="replyMsg">Message : </label></br>
+        <textarea name="replyMsg" id="replyMsg" required maxlength="500" rows="5" cols="100"></textarea>
+      </div>
+      <div class="fields" id="txtarea">
+        <label for="replyCode">Ajout de code : </label></br>
+        <textarea name="replyCode" id="replyCode" maxlength="500" rows="5" cols="100"></textarea>
+      </div>
+      <div id="buttons">
+        <input type="reset" value="Recommencer" id="resetButton">
+        <input type="submit" value="Créer" id="submitButton">
+      </div>
+    </form>
+  </section>
+
+  <script src="js/main.js" type="module"></script>
+  <script src="js/topic.js" type="module"></script>
+</body>
+
+</html>
