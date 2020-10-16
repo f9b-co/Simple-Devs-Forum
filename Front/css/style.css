@@ -9,7 +9,7 @@ body {
   position: fixed;
   top: 0;
   bottom: 0;
-  left: 0;
+  left: 50px;
   right: 0;
   align-items: center;
 }
@@ -26,8 +26,8 @@ h2 {
   color: slategrey;
 }
 section {
-  min-width: 360px;
-  max-width: 1080px;
+  min-width: 500px;
+  max-width: 1000px;
   margin-top: 1rem;
   border-top: 1px solid grey;
 }
@@ -43,8 +43,13 @@ span {
 .fields {
   margin-bottom: 1rem;
 }
-#topicsList {
-  height: 46vh;
+.hidden {
+  display: none;
+}
+#topicsList,
+#viewTopic,
+#topicTools {
+  height: 40vh;
   overflow-y: scroll;
 }
 #topicInfos {
@@ -54,7 +59,7 @@ span {
 #topicText {
   margin-left: 2rem;
   padding: 0.5rem;
-  border-left: 2px solid grey;
+  border-left: 2px solid hsl(210, 13%, 85%);
   background-color: hsl(0, 0%, 93%);
 }
 #repliesList li {
@@ -62,4 +67,8 @@ span {
   padding: 0.5rem;
   border-left: 2px dashed lightgrey;
   background-color: hsl(185, 100%, 95%);
+}
+#repliesList li p {
+  padding: 0 3rem;
+  background-color: hsl(39, 100%, 95%);
 }

@@ -10,15 +10,17 @@
 
 <body>
   <h1>Forum Développeurs - Accueil</h1>
-  <section id="topicsList" hidden=true>
+  <section class="hidden" id="topicsList">
     <h2>Listes des topics</h2>
   </section>
   <section id="topicTools">
     <form id="createTopicForm" method="post" data-slug="topics">
       <h2>Creation d'un nouveau topic</h2>
       <div>
+        <input class="hidden" type="text" name="submitDateTime" id="submitDateTime">
         <label for="nickname">Pseudo : </label>
-        <input class="fields" type="text" name="nickname" id="nickname" required autofocus minlength="2">
+        <input class="fields" type="text" name="nickname" id="nickname" required autofocus minlength="2" maxlength="32">
+        <input class="hidden" type="text" name="postId" id="postId">
       </div>
       <div>
         <label for="subject">Sujet : </label>

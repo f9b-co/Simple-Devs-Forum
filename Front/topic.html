@@ -18,18 +18,21 @@
     </div>
   </section>
   <section id="topicTools">
-    <button id="replyTopicButton" hidden=true>Répondre</button>
+    <button class="hidden" id="replyTopicButton">Répondre</button>
     <form id="replyTopicForm" method="patch" data-slug="replies">
       <h2>Ajout d'une réponse</h2>
       <div>
+        <input class="hidden" type="text" name="submitDateTime" id="submitDateTime">
         <label for="replyNickname">Pseudo : </label>
-        <input class="fields" type="text" name="replyNickname" id="replyNickname" required autofocus minlength="2">
+        <input class="fields" type="text" name="replyNickname" id="replyNickname" required autofocus minlength="2"
+          maxlength="32">
+        <input class="hidden" type="text" name="postId" id="postId">
       </div>
-      <div class="fields" id="txtarea">
+      <div class="fields" id="textAreaMsg">
         <label for="replyMsg">Message : </label></br>
         <textarea name="replyMsg" id="replyMsg" required maxlength="500" rows="5" cols="100"></textarea>
       </div>
-      <div class="fields" id="txtarea">
+      <div class="fields" id="textAreaCode">
         <label for="replyCode">Ajout de code : </label></br>
         <textarea name="replyCode" id="replyCode" maxlength="500" rows="5" cols="100"></textarea>
       </div>

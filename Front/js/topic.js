@@ -5,14 +5,14 @@ const docIdTopicText = document.querySelector("#topicText");
 const docIdRepliesList = document.querySelector("#repliesList");
 const docIdReplyTopicButton = document.querySelector("#replyTopicButton");
 
+
 window.addEventListener("DOMContentLoaded", (event) => {
   const newTopicData = sessionStorage.getItem('newTopicData');
   const currentNewTopic = sessionStorage.getItem('currentNewTopic');
   const topicToLoad = sessionStorage.getItem('topicToLoad');
   const topicData = newTopicData;//(mJs.notNullCheck(newTopicData))? newTopicData : loadTopic(topicToLoad);
 
-  displayTopic(topicData);
-  
+  displayTopic(topicData);  
   
 /*   (mJs.notNullCheck(newTopicData))? 
     sessionStorage.removeItem('newTopicData'):
@@ -24,8 +24,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
     },
     false
   ); */
-  docIdReplyTopicForm.addEventListener(
-    "submit", (e) => {
+  docIdReplyTopicForm.addEventListener("submit", (e) => {
       e.preventDefault();
       mJs.submitBehavior(docIdReplyTopicForm);    
     },
