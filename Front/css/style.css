@@ -9,52 +9,56 @@ body {
   position: fixed;
   top: 0;
   bottom: 0;
-  left: 50px;
+  left: 0;
   right: 0;
   align-items: center;
 }
 h1 {
   width: 100%;
-  margin-bottom: 1.25rem;
-  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
   color: darkslategrey;
 }
 h2 {
   width: 100%;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
   font-size: 1rem;
   color: slategrey;
 }
 section {
   min-width: 500px;
   max-width: 1000px;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   border-top: 1px solid grey;
 }
 div {
   margin: 0;
 }
 span {
-  margin: 1rem 1rem 1rem 0;
+  margin: 0.5rem 1rem 1rem 0;
 }
 .bold {
   font-weight: bold;
 }
 .fields {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 .hidden {
   display: none;
 }
+.topicInfos {
+  font-weight: bold;
+  background-color: hsl(210, 13%, 85%);
+}
+#main {
+  margin-left: auto;
+  margin-right: auto;
+}
 #topicsList,
 #viewTopic,
 #topicTools {
-  height: 40vh;
+  height: 45vh;
   overflow-y: scroll;
-}
-#topicInfos {
-  font-weight: bold;
-  background-color: hsl(210, 13%, 85%);
 }
 #topicText {
   margin-left: 2rem;

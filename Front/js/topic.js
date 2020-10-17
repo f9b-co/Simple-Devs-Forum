@@ -14,16 +14,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
   displayTopic(topicData);  
   
-/*   (mJs.notNullCheck(newTopicData))? 
-    sessionStorage.removeItem('newTopicData'):
-    sessionStorage.removeItem('topicToLoad'); */
-
-/*   docIdReplyTopicButton.addEventListener(
-    "click", (e) => {
-      docIdReplyTopicForm.setAttribute("hidden", false);
-    },
-    false
-  ); */
   docIdReplyTopicForm.addEventListener("submit", (e) => {
       e.preventDefault();
       mJs.submitBehavior(docIdReplyTopicForm);    
@@ -37,6 +27,7 @@ function loadTopic (topicId){
 }
 
 function displayTopic(jsonTopic) {
+  console.log(jsonTopic);
   const topic = Object.entries(JSON.parse(jsonTopic));  
   for (let i = 0; i < topic.length; i++) {
     if (topic[i][0] == "topicMsg") {
@@ -49,7 +40,9 @@ function displayTopic(jsonTopic) {
       });
     } else {
       mJs.createChildWithIdAndValueFromArray(docIdTopicInfos, "span", topic, i);
-    }
+    }    
+    sessionStorage.removeItem('newTopicData');
+    sessionStorage.removeItem('topicToLoad');
   }
 }
 

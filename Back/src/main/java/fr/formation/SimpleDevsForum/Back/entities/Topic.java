@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import java.util.Set;
 
 @Entity
-@Table(name="")
+@Table(name="topics")
 public class Topic {
 
     @Id
@@ -14,12 +14,20 @@ public class Topic {
 
     private String postId;
 
-    private Timestamp submitDateTime;
+    private Timestamp submitDate;
 
     private String nickname;
 
+    private String subject;
+
     private String topicMsg;
 
+    @ManyToOne(cascade={CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn (name = "devs_id")
+    private Dev dev;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn (name = "topics_id")
     private Set<Reply> replies;
 
     public Topic() {
@@ -35,11 +43,11 @@ public class Topic {
     public void setPostId(String postId) {
         this.postId = postId;
     }
-    public Timestamp getSubmitDateTime() {
-        return submitDateTime;
+    public Timestamp getSubmitDate() {
+        return submitDate;
     }
-    public void setSubmitDateTime(Timestamp submitDateTime) {
-        this.submitDateTime = submitDateTime;
+    public void setSubmitDate(Timestamp submitDate) {
+        this.submitDate = submitDate;
     }
     public String getNickname() {
         return nickname;
@@ -47,16 +55,18 @@ public class Topic {
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
+    public String getSubject() { return subject; }
+    public void setSubject(String subject) { this.subject = subject; }
     public String getTopicMsg() {
         return topicMsg;
     }
     public void setTopicMsg(String topicMsg) {
         this.topicMsg = topicMsg;
     }
+    public Dev getDev() { return dev; }
+    public void setDev(Dev dev) { this.dev = dev; }
     public Set<Reply> getReplies() {
         return replies;
     }
-    public void setReplies(Set<Reply> replies) {
-        this.replies = replies;
-    }
+    public void setReplies(Set<Reply> replies) { this.replies = replies; };
 }

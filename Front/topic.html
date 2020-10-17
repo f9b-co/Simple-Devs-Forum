@@ -9,38 +9,39 @@
 </head>
 
 <body>
-  <h1>Forum Développeurs - Détail du topic</h1>
-  <section id="viewTopic">
-    <div id="topicInfos"></div>
-    <div id="topicText"></div>
-    <div id="topicReplies">
-      <ul id="repliesList"></ul>
-    </div>
-  </section>
-  <section id="topicTools">
-    <button class="hidden" id="replyTopicButton">Répondre</button>
-    <form id="replyTopicForm" method="patch" data-slug="replies">
-      <h2>Ajout d'une réponse</h2>
-      <div>
-        <input class="hidden" type="text" name="submitDateTime" id="submitDateTime">
-        <label for="replyNickname">Pseudo : </label>
-        <input class="fields" type="text" name="replyNickname" id="replyNickname" required autofocus minlength="2"
-          maxlength="32">
-        <input class="hidden" type="text" name="postId" id="postId">
+  <section id="main">
+    <h1>Forum Développeurs - Détail du topic</h1>
+    <section id="viewTopic">
+      <div class="topicInfos" id="topicInfos"></div>
+      <div id="topicText"></div>
+      <div id="topicReplies">
+        <ul id="repliesList"></ul>
       </div>
-      <div class="fields" id="textAreaMsg">
-        <label for="replyMsg">Message : </label></br>
-        <textarea name="replyMsg" id="replyMsg" required maxlength="500" rows="5" cols="100"></textarea>
-      </div>
-      <div class="fields" id="textAreaCode">
-        <label for="replyCode">Ajout de code : </label></br>
-        <textarea name="replyCode" id="replyCode" maxlength="500" rows="5" cols="100"></textarea>
-      </div>
-      <div id="buttons">
-        <input type="reset" value="Recommencer" id="resetButton">
-        <input type="submit" value="Créer" id="submitButton">
-      </div>
-    </form>
+    </section>
+    <section id="topicTools">
+      <form id="replyTopicForm" name="replyTopicForm" method="patch" data-slug="replies">
+        <h2>Ajout d'une réponse</h2>
+        <div>
+          <input class="hidden" type="text" name="submitDate" id="submitDate">
+          <label for="replyNickname">Pseudo : </label>
+          <input class="fields" type="text" name="nickname" id="nickname" required autofocus minlength="2"
+            maxlength="32">
+          <input class="hidden" type="text" name="postId" id="postId">
+        </div>
+        <div class="fields" id="textAreaMsg">
+          <label for="replyMsg">Message : </label></br>
+          <textarea name="replyMsg" id="replyMsg" required maxlength="500" rows="5" cols="100"></textarea>
+        </div>
+        <div class="fields" id="textAreaCode">
+          <label for="replyCode">Ajout de code : </label></br>
+          <textarea name="replyCode" id="replyCode" maxlength="500" rows="5" cols="100"></textarea>
+        </div>
+        <div id="buttons">
+          <input type="reset" value="Recommencer" id="resetButton">
+          <input type="submit" value="Créer" id="submitButton">
+        </div>
+      </form>
+    </section>
   </section>
 
   <script src="js/main.js" type="module"></script>

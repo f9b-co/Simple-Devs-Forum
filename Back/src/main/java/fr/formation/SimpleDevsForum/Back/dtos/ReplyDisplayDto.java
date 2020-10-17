@@ -4,13 +4,15 @@ import java.sql.Timestamp;
 
 public interface ReplyDisplayDto {
 
-    Long getId(); //?
+    Long getId();
 
     String getPostId();
 
-    Timestamp getSubmitDateTime();
+    String getTopicPostId();
 
-    String getReplyNickname();
+    Timestamp getSubmitDate();
+
+    String getNickname();
 
     String getReplyMsg();
 

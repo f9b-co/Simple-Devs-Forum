@@ -15,79 +15,92 @@ export const fetchesParams = [
     headers: { "Content-Type": "application/json; charset=utf-8" },
     body: null,
     mode: "cors",
-    cache: "default"}
+    cache: "default",}
 ];
 
-//DOM await to avoid anoying interractions between the script execution on the 2 pages
+document.onload = orderAndServe(setUrlEndpoint("/topics", "?p=0&s=10"), fetchesParams[0], list);
+
+//await DOM loading end to avoid some annoying interractions between the 2 pages scripts execution
 window.addEventListener("DOMContentLoaded", (event) => {
-  docIdCreateTopicForm.addEventListener("submit", (e) => {
+  docIdCreateTopicForm.addEventListener("submit", (e) => {    
       e.preventDefault(); // Cancel submit default behavior
       submitBehavior(docIdCreateTopicForm);    
     },
     false
   );
 });
-/* document.onload = orderAndServe(setUrlEndpoint("/topics", "?size=10"), fetchesParams[0], list); */
 
-// Create form submit behavior defining fetch specific params
+// Create form submit behavior defining fetch specific params including jsonString converted data
 export function submitBehavior(form) {
   const submitTimestamp = Date.now();
   const urlSlug = "/topics/";
-  const newId = submitTimestamp+"_"+form.querySelector("input:first-of-type").value;
+  const newId = submitTimestamp+"_"+form.querySelector("#nickname").value;
 
   const data = new FormData(form);
-  data.set("submitDateTime", submitTimestamp);
+  data.set("submitDate", submitTimestamp);
   data.set("postId", newId);
+  if (form.getAttribute("name").includes("reply")) {
+    data.append("topicPostId", sessionStorage.getItem("topicPostId"));
+  }
   const jsonData = JSON.stringify(Object.fromEntries(data));
   console.log(jsonData);
   
   const url = setUrlEndpoint(urlSlug, "");
 
-  const fetchParams = (form.getAttribute("method") == "post")? 
-    fetchesParams[1].body = jsonData:
-    fetchesParams[2].body = jsonData;
-  console.log(fetchParams);
+  const fetchParams = (form.getAttribute("method") == "post")? fetchesParams[1]: fetchesParams[2];
+  fetchParams.body = jsonData;
   
-  console.log((form.getAttribute("data-slug").includes("topic")));
-  const callback = (form.getAttribute("data-slug").includes("topic"))?
-    newTopicSuccess:
-    tJs.newReplySuccess;
+  const callback = (form.getAttribute("data-slug").includes("topic"))? newTopicSuccess: tJs.newReplySuccess;
 
-  /* orderAndServe(url, fetchParams, callback); */
-  callback(jsonData); // for test purpose until backend release
+  orderAndServe(url, fetchParams, callback);
 }
 
 // fetch call with specific params, errors simple management and callback regarding request type
-export function orderAndServe(url, params, callback) {
-  fetch(url, params)
-    .then((resp) => {
-      if (response.status !== 200) {
-        alert(
-          "La réponse du serveur ne nous comble point... : \n" + response.status
-        );
-        return;
-      }
-      (["POST", "PUT", "PATCH"].includes(params.method))? callback(params.body): callback(resp);
-    })
-    .catch((error) =>
-      alert("Fichtre! Une erreur nous casse les fetchs : \n" + error)
-    );
+export function orderAndServe(url, params, callback) {  
+
+    fetch(url, params)
+      .then(response => response.json())
+      .then(result => {
+        if (["POST", "PUT", "PATCH"].includes(params.method)){
+        callback(params.body)
+        } else {
+          callback(result);
+        }
+      })
+      .catch((error) => {
+        console.log("Fichtre! Une erreur nous casse les fetchs : \n" + error.message)
+    });  
+  
 }
 
 function newTopicSuccess(jsonTopic) {
   window.location.href = "/topic.html";
   sessionStorage.setItem('newTopicData', jsonTopic);
-  sessionStorage.setItem('currentNewTopic', JSON.parse(jsonTopic).postId)
+  sessionStorage.setItem('topicPostId', JSON.parse(jsonTopic).postId);
 }
 
-export function list(topics) {
-  console.log(topics);
-  topics.forEach((topic) => {
-    //
+function list(topics) {
+  const topicsContent = topics.content;
+  console.log(topicsContent);
+  topicsContent.forEach((topic) => {   
+    const div = createNode("div");
+      const span = createNode("span");
+      span.setAttribute("id", "nickname");
+      span.innerHTML = topic.nickname;
+      append(div, span);
+      const span2 = createNode("span2");
+      span2.setAttribute("id", "submitDate");
+      span2.innerHTML = topic.submitDate;
+      append(div, span2);
+      const span3 = createNode("span3");
+      span3.setAttribute("id", "sujbect");
+      span3.innerHTML = topic.subject;
+      append(div, span3);
+    append(docIdTopicsList, div); 
   });
 }
 
-export function makeTopicClickable() {
+function makeTopicClickable() {
   document.getElementById("#").addEventListener("click", function () {
     //;
   });
@@ -107,10 +120,12 @@ export function notNullCheck(el) {
 }
 
 export function createChildWithIdAndValueFromArray(parent, childTag, array, i) {
-  if ((array[i][0] != "postId") && (array[i][0] != "replyCode")) { // discard 2 fields to treat them another way
+     
+  console.log(array);  
+  if ((array[i][0] != "postId")&& (array[i][0] != "TopicPostId") && (array[i][0] != "replyCode")) { // discard 2 fields to treat them another way
     const child = createNode(childTag);
     child.setAttribute("id", array[i][0])
-    if (array[i][0] == "submitDateTime") { 
+    if (array[i][0] == "submitDate") { 
       child.innerHTML = formatDate(Date(array[i][1])); // display Timestamp as wanted date & time format
     } else {
       child.innerHTML = array[i][1]; // display "standard" fields
