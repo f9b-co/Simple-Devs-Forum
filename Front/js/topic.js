@@ -7,10 +7,8 @@ const docIdReplyTopicButton = document.querySelector("#replyTopicButton");
 
 
 window.addEventListener("DOMContentLoaded", (event) => {
-  const newTopicData = sessionStorage.getItem('newTopicData');
-  const currentNewTopic = sessionStorage.getItem('currentNewTopic');
-  const topicToLoad = sessionStorage.getItem('topicToLoad');
-  const topicData = newTopicData;//(mJs.notNullCheck(newTopicData))? newTopicData : loadTopic(topicToLoad);
+  const topicPostId = sessionStorage.getItem('topicPostId');
+  const topicData = sessionStorage.getItem('topicData');;
 
   displayTopic(topicData);  
   
@@ -21,10 +19,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
     false
   );
 });
-
-function loadTopic (topicId){
-  //mJs.orderAndServe(mJs.setUrlEndpoint("/topics/", topicId), mJs.fetchesParams[0], displayTopic);
-}
 
 function displayTopic(jsonTopic) {
   console.log(jsonTopic);
@@ -41,8 +35,7 @@ function displayTopic(jsonTopic) {
     } else {
       mJs.createChildWithIdAndValueFromArray(docIdTopicInfos, "span", topic, i);
     }    
-    sessionStorage.removeItem('newTopicData');
-    sessionStorage.removeItem('topicToLoad');
+    sessionStorage.removeItem('topicData');
   }
 }
 

@@ -18,7 +18,7 @@ export const fetchesParams = [
     cache: "default",}
 ];
 
-document.onload = orderAndServe(setUrlEndpoint("/topics", "?p=0&s=10"), fetchesParams[0], list);
+document.onload = orderAndServe(setUrlEndpoint("/topics", "?p=0&s=100"), fetchesParams[0], list);
 
 //await DOM loading end to avoid some annoying interractions between the 2 pages scripts execution
 window.addEventListener("DOMContentLoaded", (event) => {
@@ -61,8 +61,9 @@ export function orderAndServe(url, params, callback) {
     fetch(url, params)
       .then(response => response.json())
       .then(result => {
+        console.log(result);
         if (["POST", "PUT", "PATCH"].includes(params.method)){
-        callback(params.body)
+          callback(params.body)
         } else {
           callback(result);
         }
@@ -75,34 +76,35 @@ export function orderAndServe(url, params, callback) {
 
 function newTopicSuccess(jsonTopic) {
   window.location.href = "/topic.html";
-  sessionStorage.setItem('newTopicData', jsonTopic);
+  sessionStorage.setItem('topicData', jsonTopic);
+  sessionStorage.setItem('topicPostId', JSON.parse(jsonTopic).postId);
+}
+
+function loadTopic (result) {
+  window.location.href = "/topic.html";
+  sessionStorage.setItem('topicData', resultToJsonTopic);
   sessionStorage.setItem('topicPostId', JSON.parse(jsonTopic).postId);
 }
 
 function list(topics) {
   const topicsContent = topics.content;
-  console.log(topicsContent);
   topicsContent.forEach((topic) => {   
     const div = createNode("div");
-      const span = createNode("span");
-      span.setAttribute("id", "nickname");
-      span.innerHTML = topic.nickname;
-      append(div, span);
-      const span2 = createNode("span2");
-      span2.setAttribute("id", "submitDate");
-      span2.innerHTML = topic.submitDate;
-      append(div, span2);
-      const span3 = createNode("span3");
-      span3.setAttribute("id", "sujbect");
-      span3.innerHTML = topic.subject;
-      append(div, span3);
+    div.setAttribute("class","topicInfos");
+      const dateDiv = createNode("div", "submitDate", "submitDate", formatDate(topic.submitDate));
+      append(div, dateDiv);
+      const nameDiv = createNode("div", "nickname", "nickname", topic.nickname);
+      append(div, nameDiv);
+      const subjectDiv = createNode("div", "subject", "subject", topic.subject);
+      append(div, subjectDiv);
+      makeTopicClickable(div,topic.postId)
     append(docIdTopicsList, div); 
   });
 }
 
-function makeTopicClickable() {
-  document.getElementById("#").addEventListener("click", function () {
-    //;
+function makeTopicClickable(el,topicPostId) {
+  el.addEventListener("click", function () {
+    orderAndServe(setUrlEndpoint("/topics/", topicPostId), fetchesParams[0], loadTopic);
   });
 }
 
@@ -120,22 +122,18 @@ export function notNullCheck(el) {
 }
 
 export function createChildWithIdAndValueFromArray(parent, childTag, array, i) {
-     
-  console.log(array);  
   if ((array[i][0] != "postId")&& (array[i][0] != "TopicPostId") && (array[i][0] != "replyCode")) { // discard 2 fields to treat them another way
-    const child = createNode(childTag);
-    child.setAttribute("id", array[i][0])
+    let inHtml = "";    
     if (array[i][0] == "submitDate") { 
-      child.innerHTML = formatDate(Date(array[i][1])); // display Timestamp as wanted date & time format
+      inHtml = formatDate(Date(array[i][1])); // display Timestamp as wanted date & time format
     } else {
-      child.innerHTML = array[i][1]; // display "standard" fields
+      inHtml = array[i][1]; // display "standard" fields
     }
+    const child = createNode(childTag, array[i][0], "", inHtml);
     append(parent, child);
   }
   if (array[i][0] == "replyCode") { // specific display for one of the 2 dicarded fields
-      const p = createNode("p");
-      p.setAttribute("id", array[i][0]);
-      p.innerHTML = array[i][1];
+      const p = createNode("p", array[i][0],"",array[i][1]);
       append(parent, p);
   }
 }
@@ -144,8 +142,12 @@ export function append(parent, el) {
   return parent.appendChild(el);
 }
 
-export function createNode(el) {
-  return document.createElement(el);
+export function createNode(elType, id="", classes="", innerhtml="") {
+  const el = document.createElement(elType);
+  el.setAttribute("id", id);
+  el.setAttribute("class", classes);
+  el.innerHTML = innerhtml;
+  return el;
 }
 
 function formatDate(d) {
