@@ -30,6 +30,10 @@ public class TopicServiceImpl implements TopicService {
         this.replyRepo = replyRepo;
     }
 
+    public boolean devExist(String nickname) {
+        return devRepo.findByNickname(nickname).isPresent();
+    }
+
     @Override
     public void create(TopicCreateDto dto) {
         Set<Reply> replies = new HashSet<Reply>();
@@ -39,8 +43,13 @@ public class TopicServiceImpl implements TopicService {
         newTopic.setNickname(dto.getNickname());
         newTopic.setSubject(dto.getSubject());
         newTopic.setTopicMsg(dto.getTopicMsg());
-        Dev dev = devRepo.findByNickname(dto.getNickname()).orElse(devRepo.save(new Dev(dto.getNickname())));
-        newTopic.setDev(dev);
+        if(devExist(dto.getNickname())){
+            newTopic.setDev(devRepo.findByNickname(dto.getNickname()).get());
+        } else {
+            newTopic.setDev(devRepo.save(new Dev(dto.getNickname())));
+        }
+        /*Dev dev = devRepo.findByNickname(dto.getNickname()).orElse(devRepo.save(new Dev(dto.getNickname())));
+        newTopic.setDev(dev);*/
         topicRepo.save(newTopic);
     }
 
@@ -57,8 +66,11 @@ public class TopicServiceImpl implements TopicService {
         newReply.setNickname(dto.getNickname());
         newReply.setReplyMsg(dto.getReplyMsg());
         newReply.setReplyCode(dto.getReplyCode());
-        Dev dev = devRepo.findByNickname(dto.getNickname()).orElse(devRepo.save(new Dev(dto.getNickname())));
-        newReply.setDev(dev);
+        if(devExist(dto.getNickname())){
+            newReply.setDev(devRepo.findByNickname(dto.getNickname()).get());
+        } else {
+            newReply.setDev(devRepo.save(new Dev(dto.getNickname())));
+        }
         newReply.setTopicId(topic.getId());
         replyRepo.save(newReply);
         Set<Reply> replies = topic.getReplies();

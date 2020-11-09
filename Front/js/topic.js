@@ -6,23 +6,26 @@ const docIdRepliesList = document.querySelector("#repliesList");
 const docIdReplyTopicButton = document.querySelector("#replyTopicButton");
 
 
-window.addEventListener("DOMContentLoaded", (event) => {
-  const topicPostId = sessionStorage.getItem('topicPostId');
-  const topicData = sessionStorage.getItem('topicData');;
-
-  displayTopic(topicData);  
-  
-  docIdReplyTopicForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      mJs.submitBehavior(docIdReplyTopicForm);    
-    },
-    false
-  );
+document.addEventListener("DOMContentLoaded", (event) => {
+  if(window.location.pathname = "/topic.html") {
+    const topicPostId = sessionStorage.getItem('topicPostId');
+    const topicData = sessionStorage.getItem('topicData');
+    
+    displayTopic(topicData);
+    
+    docIdReplyTopicForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        mJs.submitBehavior(docIdReplyTopicForm);    
+      },
+      false
+    );
+  }
 });
 
 function displayTopic(jsonTopic) {
   console.log(jsonTopic);
   const topic = Object.entries(JSON.parse(jsonTopic));  
+  console.log(topic);
   for (let i = 0; i < topic.length; i++) {
     if (topic[i][0] == "topicMsg") {
       docIdTopicText.innerHTML = topic[i][1];
@@ -44,7 +47,8 @@ function displayNewReply (jsonReply) {
   displayReply (reply);
 }
 
-function displayReply (reply) {  
+function displayReply (reply) {
+  console.log(reply);
   const li = mJs.createNode("li");
   mJs.append(docIdRepliesList, li);
   for (let i = 0; i < reply.length; i++) {

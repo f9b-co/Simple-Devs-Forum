@@ -18,17 +18,31 @@ export const fetchesParams = [
     cache: "default",}
 ];
 
-document.onload = orderAndServe(setUrlEndpoint("/topics", "?p=0&s=100"), fetchesParams[0], list);
 
-//await DOM loading end to avoid some annoying interractions between the 2 pages scripts execution
-window.addEventListener("DOMContentLoaded", (event) => {
-  docIdCreateTopicForm.addEventListener("submit", (e) => {    
-      e.preventDefault(); // Cancel submit default behavior
-      submitBehavior(docIdCreateTopicForm);    
-    },
-    false
-  );
-});
+document.onload = orderAndServe(setUrlEndpoint("/topics", "?p=0&s=100"), fetchesParams[0], list);
+docIdCreateTopicForm.addEventListener("submit", (e) => {    
+    e.preventDefault(); // Cancel submit default behavior
+    submitBehavior(docIdCreateTopicForm);    
+  },
+  false
+);
+
+//await linked html page loading end to avoid some annoying interractions between the 2 pages scripts execution
+/* if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', onLoad());
+} else {
+  onLoad();
+}
+
+function onLoad() {
+    orderAndServe(setUrlEndpoint("/topics", "?p=0&s=100"), fetchesParams[0], list);
+    docIdCreateTopicForm.addEventListener("submit", (e) => {    
+        e.preventDefault(); // Cancel submit default behavior
+        submitBehavior(docIdCreateTopicForm);    
+      },
+      false
+    );
+} */
 
 // Create form submit behavior defining fetch specific params including jsonString converted data
 export function submitBehavior(form) {
@@ -42,6 +56,7 @@ export function submitBehavior(form) {
   if (form.getAttribute("name").includes("reply")) {
     data.append("topicPostId", sessionStorage.getItem("topicPostId"));
   }
+  console.log(data);
   const jsonData = JSON.stringify(Object.fromEntries(data));
   console.log(jsonData);
   
@@ -59,8 +74,16 @@ export function submitBehavior(form) {
 export function orderAndServe(url, params, callback) {  
 
     fetch(url, params)
-      .then(response => response.json())
+      .then(response => /* {        
+        if (["POST", "PUT", "PATCH"].includes(params.method)){
+          response.text();
+        } else {
+          response.json();
+        }
+      }) */
+      response.json())
       .then(result => {
+        console.log(params.body);
         console.log(result);
         if (["POST", "PUT", "PATCH"].includes(params.method)){
           callback(params.body)
@@ -75,15 +98,15 @@ export function orderAndServe(url, params, callback) {
 }
 
 function newTopicSuccess(jsonTopic) {
-  window.location.href = "/topic.html";
+  window.location.pathname = "/topic.html";
   sessionStorage.setItem('topicData', jsonTopic);
   sessionStorage.setItem('topicPostId', JSON.parse(jsonTopic).postId);
 }
 
 function loadTopic (result) {
-  window.location.href = "/topic.html";
-  sessionStorage.setItem('topicData', resultToJsonTopic);
-  sessionStorage.setItem('topicPostId', JSON.parse(jsonTopic).postId);
+  window.location.pathname = "/topic.html";
+  sessionStorage.setItem('topicData', JSON.stringify(result));
+  sessionStorage.setItem('topicPostId', result.postId);
 }
 
 function list(topics) {
@@ -122,18 +145,22 @@ export function notNullCheck(el) {
 }
 
 export function createChildWithIdAndValueFromArray(parent, childTag, array, i) {
-  if ((array[i][0] != "postId")&& (array[i][0] != "TopicPostId") && (array[i][0] != "replyCode")) { // discard 2 fields to treat them another way
-    let inHtml = "";    
+  if ((array[i][0] != "postId") && (array[i][0] != "topicPostId") && (array[i][0] != "replyCode")) { // discard 3 fields to treat them another way
+    let child = createNode(childTag);
+    child.setAttribute("id", array[i][0])
+    let inHtml = "";
     if (array[i][0] == "submitDate") { 
       inHtml = formatDate(Date(array[i][1])); // display Timestamp as wanted date & time format
     } else {
       inHtml = array[i][1]; // display "standard" fields
     }
-    const child = createNode(childTag, array[i][0], "", inHtml);
+    child = createNode(childTag, array[i][0], "", inHtml);
     append(parent, child);
   }
-  if (array[i][0] == "replyCode") { // specific display for one of the 2 dicarded fields
-      const p = createNode("p", array[i][0],"",array[i][1]);
+  if (array[i][0] == "replyCode") { // specific display for one of the 3 dicarded fields
+      const p = createNode("p");
+      p.setAttribute("id", array[i][0]);
+      p.innerHTML = array[i][1];
       append(parent, p);
   }
 }
