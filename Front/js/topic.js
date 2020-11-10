@@ -33,7 +33,7 @@ function displayTopic(jsonTopic) {
       docIdTopicText.innerHTML = topic[i][1];
     } else if (topic[i][0] == "replies") {
       topic[i][1].forEach(reply => {
-        displayReply (Object.entries(reply));        
+        displayReply(Object.entries(reply));        
       });
     } else {
       mJs.createChildWithIdAndValueFromArray(docIdTopicInfos, "span", topic, i);

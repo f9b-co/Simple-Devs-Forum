@@ -2,6 +2,7 @@ package fr.formation.SimpleDevsForum.Back.entities;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -28,7 +29,7 @@ public class Topic {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn (name = "topics_id")
-    private Set<Reply> replies;
+    private List<Reply> replies;
 
     public Topic() {
         //
@@ -65,8 +66,8 @@ public class Topic {
     }
     public Dev getDev() { return dev; }
     public void setDev(Dev dev) { this.dev = dev; }
-    public Set<Reply> getReplies() {
+    public List<Reply> getReplies() {
         return replies;
     }
-    public void setReplies(Set<Reply> replies) { this.replies = replies; };
+    public void setReplies(List<Reply> replies) { this.replies = replies; };
 }

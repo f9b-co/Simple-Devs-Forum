@@ -63,15 +63,11 @@ export function submitBehavior(form) {
 export function orderAndServe(url, params, callback) {  
 
     fetch(url, params)
-      .then(response => response.json())
+      .then(response => (["POST", "PUT", "PATCH"].includes(params.method))? response.text : response.json())
       .then(result => {
         console.log(params.body);
         console.log(result);
-        if (["POST", "PUT", "PATCH"].includes(params.method)){
-          callback(params.body)
-        } else {
-          callback(result);
-        }
+        (["POST", "PUT", "PATCH"].includes(params.method))? callback(params.body) : callback(result);
       })
       .catch((error) => {
         console.log("Fichtre! Une erreur nous casse les fetchs : \n" + error.message)
@@ -85,7 +81,7 @@ function newTopicSuccess(jsonTopic) {
   sessionStorage.setItem('topicPostId', JSON.parse(jsonTopic).postId);
 }
 
-function loadTopic (result) {
+function loadTopic(result) {
   window.location.pathname = "/topic.html";
   sessionStorage.setItem('topicData', JSON.stringify(result));
   sessionStorage.setItem('topicPostId', result.postId);
@@ -131,15 +127,19 @@ export function createChildWithIdAndValueFromArray(parent, childTag, array, i) {
     let child = createNode(childTag);
     child.setAttribute("id", array[i][0])
     let inHtml = "";
-    if (array[i][0] == "submitDate") { 
-      inHtml = formatDate(Date(array[i][1])); // display Timestamp as wanted date & time format
+    if (array[i][0] == "submitDate") { // display Timestamp as wanted date & time format
+      const date = array[i][1];
+      if (date.includes(':')){
+        inHtml = formatDate(Date.parse(date));
+      } else {
+        inHtml = formatDate(Date(date));
+      }
     } else {
       inHtml = array[i][1]; // display "standard" fields
     }
     child = createNode(childTag, array[i][0], "", inHtml);
     append(parent, child);
-  }
-  if (array[i][0] == "replyCode") { // specific display for one of the 3 dicarded fields
+  } else if (array[i][0] == "replyCode") { // specific display for one of the 4 dicarded fields
       const p = createNode("p");
       p.setAttribute("id", array[i][0]);
       p.innerHTML = array[i][1];

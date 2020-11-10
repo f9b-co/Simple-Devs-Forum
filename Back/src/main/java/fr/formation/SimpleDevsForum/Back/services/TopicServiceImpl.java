@@ -14,8 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class TopicServiceImpl implements TopicService {
@@ -36,7 +36,7 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public void create(TopicCreateDto dto) {
-        Set<Reply> replies = new HashSet<Reply>();
+        List<Reply> replies = new ArrayList<>();
         Topic newTopic = new Topic();
         newTopic.setPostId(dto.getPostId());
         newTopic.setSubmitDate(dto.getSubmitDate());
@@ -71,7 +71,7 @@ public class TopicServiceImpl implements TopicService {
         }
         newReply.setTopicId(topic.getId());
         replyRepo.save(newReply);
-        Set<Reply> replies = topic.getReplies();
+        List<Reply> replies = topic.getReplies();
         replies.add(newReply);
         topic.setReplies(replies);
         topicRepo.save(topic);
