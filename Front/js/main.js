@@ -18,23 +18,11 @@ export const fetchesParams = [
     cache: "default",}
 ];
 
-
-document.onload = orderAndServe(setUrlEndpoint("/topics", "?p=0&s=100"), fetchesParams[0], list);
-docIdCreateTopicForm.addEventListener("submit", (e) => {    
-    e.preventDefault(); // Cancel submit default behavior
-    submitBehavior(docIdCreateTopicForm);    
-  },
-  false
-);
-
-//await linked html page loading end to avoid some annoying interractions between the 2 pages scripts execution
-/* if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', onLoad());
-} else {
-  onLoad();
-}
+document.onload = onLoad();
 
 function onLoad() {
+  //check url pathname (html page) to avoid some annoying interractions between the 2 pages scripts execution
+  if(window.location.pathname == "/index.html") {
     orderAndServe(setUrlEndpoint("/topics", "?p=0&s=100"), fetchesParams[0], list);
     docIdCreateTopicForm.addEventListener("submit", (e) => {    
         e.preventDefault(); // Cancel submit default behavior
@@ -42,7 +30,8 @@ function onLoad() {
       },
       false
     );
-} */
+  }
+}
 
 // Create form submit behavior defining fetch specific params including jsonString converted data
 export function submitBehavior(form) {
@@ -74,14 +63,7 @@ export function submitBehavior(form) {
 export function orderAndServe(url, params, callback) {  
 
     fetch(url, params)
-      .then(response => /* {        
-        if (["POST", "PUT", "PATCH"].includes(params.method)){
-          response.text();
-        } else {
-          response.json();
-        }
-      }) */
-      response.json())
+      .then(response => response.json())
       .then(result => {
         console.log(params.body);
         console.log(result);
@@ -145,7 +127,7 @@ export function notNullCheck(el) {
 }
 
 export function createChildWithIdAndValueFromArray(parent, childTag, array, i) {
-  if ((array[i][0] != "postId") && (array[i][0] != "topicPostId") && (array[i][0] != "replyCode")) { // discard 3 fields to treat them another way
+  if ((array[i][0] != "id") && (array[i][0] != "postId") && (array[i][0] != "topicPostId") && (array[i][0] != "replyCode")) { // discard 4 fields to treat them another way
     let child = createNode(childTag);
     child.setAttribute("id", array[i][0])
     let inHtml = "";

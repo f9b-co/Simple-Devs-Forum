@@ -48,8 +48,6 @@ public class TopicServiceImpl implements TopicService {
         } else {
             newTopic.setDev(devRepo.save(new Dev(dto.getNickname())));
         }
-        /*Dev dev = devRepo.findByNickname(dto.getNickname()).orElse(devRepo.save(new Dev(dto.getNickname())));
-        newTopic.setDev(dev);*/
         topicRepo.save(newTopic);
     }
 

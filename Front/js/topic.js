@@ -5,9 +5,11 @@ const docIdTopicText = document.querySelector("#topicText");
 const docIdRepliesList = document.querySelector("#repliesList");
 const docIdReplyTopicButton = document.querySelector("#replyTopicButton");
 
+document.onload = onLoad();
 
-document.addEventListener("DOMContentLoaded", (event) => {
-  if(window.location.pathname = "/topic.html") {
+function onLoad() {
+  //check url pathname (html page) to avoid some annoying interractions between the 2 pages scripts execution
+  if(window.location.pathname == "/topic.html") {
     const topicPostId = sessionStorage.getItem('topicPostId');
     const topicData = sessionStorage.getItem('topicData');
     
@@ -20,7 +22,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       false
     );
   }
-});
+}
 
 function displayTopic(jsonTopic) {
   console.log(jsonTopic);
@@ -29,11 +31,9 @@ function displayTopic(jsonTopic) {
   for (let i = 0; i < topic.length; i++) {
     if (topic[i][0] == "topicMsg") {
       docIdTopicText.innerHTML = topic[i][1];
-    } else if (topic[i][0] == "repliesList") {
-      topic[i][0].forEach(reply => { 
-        const li = mJs.createNode("li");
-        mJs.append(docIdRepliesList, li);
-        displayReply (reply);        
+    } else if (topic[i][0] == "replies") {
+      topic[i][1].forEach(reply => {
+        displayReply (Object.entries(reply));        
       });
     } else {
       mJs.createChildWithIdAndValueFromArray(docIdTopicInfos, "span", topic, i);
